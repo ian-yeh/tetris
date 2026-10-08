@@ -1,21 +1,16 @@
-#include <ncurses.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
 #include <locale.h>
 
+#include "display.h"
 #include "tetris.h"
+#include "main.h"
 
-#define COL_SPACE 2
-
-
-void render_game(GameState *state, WINDOW *w);
 double get_current_time();
 void handle_input(GameState *state);
 void init_display();
-void display_score(GameState *state, WINDOW *w);
-void display_debugger(GameState *state, WINDOW *w);
 
 int main() {
   printf("Welcome to Tetris!\n");
@@ -71,39 +66,9 @@ int main() {
   endwin();
   printf("Game Over\n");
 
-  return 2;
+  return EXIT_SUCCESS;
 }
 
-void render_game(GameState *state, WINDOW *w) {
-  werase(w);
-  int i, j, k;
-
-  // creating box for the game board
-  box(w, 0, 0);
-
-  // drawing the board
-  for (i = 0; i < ROWS; i++) {
-    // moves the cursor to the given row
-    wmove(w, 1 + i, 1);
-
-    for (j = 0; j < COLS; j++) {
-      if (state->board[i][j]) {
-        wattron(w, COLOR_PAIR(state->board[i][j]));
-
-        for (k = 0; k < COL_SPACE; ++k) waddch(w, ' ');
-
-        wattroff(w, COLOR_PAIR(state->board[i][j]));
-      } else {
-        //wattron(w, COLOR_PAIR(5));
-        for (k = 0; k < COL_SPACE; ++k) waddch(w, ' ');
-        //wattroff(w, COLOR_PAIR(5));
-      }
-    }
-  }
-
-  wnoutrefresh(w);
-
-}
 
 double get_current_time() {
   struct timespec ts;
@@ -166,33 +131,5 @@ void init_display() {
   init_pair(7, COLOR_WHITE, COLOR_WHITE);
 
   return;
-}
-
-void display_score(GameState *state, WINDOW *w) {
-  werase(w);
-  box(w, 0, 0);
-
-  mvwprintw(w, 1, 2, "Score: %d", state->points);
-  mvwprintw(w, 2, 2, "Level: %d", state->level);
-  mvwprintw(w, 3, 2, "Lines: %d", state->lines_remaining);
-
-  wnoutrefresh(w);
-}
-
-
-void display_debugger(GameState *state, WINDOW *w) {
-  werase(w);
-
-  box(w, 0, 0);
-  mvwprintw(w, 1, 2, "Debugger");
-
-  mvwprintw(w, 2, 2, "Piece Row: %d", state->falling.loc.row);
-  mvwprintw(w, 4, 2, "Ticks Until Falling: %d", state->ticks_until_gravity);
-  //mvwprintw(w, 5, 2, "Tetris Fits: %d", tetris_fits(state, &state->falling));
-
-  //mvwprintw(w, 7, 2, "Falling Block Row: %d", tetris_fits(state, &state->falling));
-  //mvwprintw(w, 8, 2, "Falling Block Col: %d", tetris_fits(state, &state->falling));
-
-  wnoutrefresh(w);
 }
 

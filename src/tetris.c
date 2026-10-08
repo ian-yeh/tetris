@@ -89,7 +89,6 @@ void tetris_put(GameState *state, Piece *block) {
   // right now, putting a 1x1 block
   int row = block->loc.row;
   int col = block->loc.col;
-  int (*piece)[4][4] = PIECES[block->type][block->rotation];
 
     for (int i = 0; i < 4; ++i) {
       for (int j = 0; j < 4; ++j) {
@@ -114,7 +113,6 @@ void tetris_put(GameState *state, Piece *block) {
 void tetris_remove(GameState *state, Piece *block) {
   int row = block->loc.row;
   int col = block->loc.col;
-  int (*piece)[4][4] = PIECES[block->type][block->rotation];
 
   for (int i = 0; i < 4; ++i) {
     for (int j = 0; j < 4; ++j) {
@@ -212,6 +210,8 @@ void tetris_check_lines(GameState *state) {
 bool tetris_tick(GameState *state) {
   tetris_gravity(state);
   tetris_check_lines(state);
+
+  return true;
 }
 
 //======================= MOVEMENT FUNCTIONS ===============================//
