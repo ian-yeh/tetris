@@ -8,5 +8,6 @@
 void displayBoard(GameState *state, WINDOW *w);
 void displayScore(GameState *state, WINDOW *w);
 void displayDebugger(GameState *state, WINDOW *w);
+void initDisplay();
 
 #endif

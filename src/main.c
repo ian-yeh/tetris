@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
-#include <locale.h>
 
 #include "display.h"
 #include "tetris.h"
@@ -20,12 +19,13 @@ int main() {
 
   // initializing game windows
   WINDOW *board, *score, *debug;
-  board = newwin(BOARD_ROWS+2, (BOARD_COLS*COL_SPACE)+2, 4, 20);
-  score = newwin(15, 25, 4, BOARD_COLS*COL_SPACE + 40);
-  debug = newwin(30, 50, 4, BOARD_COLS*COL_SPACE + 70);
+
+  // newwin(int rows, int cols, int begin_y, int begin_x)
+  board = newwin(BOARD_ROWS+2, (BOARD_COLS*COL_SPACE)+2, 4, 10);
+  score = newwin(BOARD_ROWS+2, 20, 4, BOARD_COLS*COL_SPACE + 10 + 5);
+  debug = newwin(BOARD_ROWS+2, 40, 4, BOARD_COLS*COL_SPACE + 10 + 25);
 
   GameState game;
-
   tetrisInitGame(&game);
 
   double timeAccumulator = 0.0; // keep track of total time
@@ -105,30 +105,6 @@ void handleInput(GameState *state) {
       state->gameOver = true;
       break;
   }
-
-  return;
-}
-
-void initDisplay() {
-  // initializing ncurses
-  setlocale(LC_ALL, "");
-  initscr();
-  cbreak();
-  noecho();
-  keypad(stdscr, TRUE);
-  nodelay(stdscr, TRUE);
-  curs_set(0);
-
-  start_color();
-
-  // initializing colour pairs
-  init_pair(1, COLOR_RED, COLOR_RED); // S piece
-  init_pair(2, COLOR_GREEN, COLOR_GREEN); // J piece
-  init_pair(3, COLOR_BLUE, COLOR_BLUE); // I piece
-  init_pair(4, COLOR_YELLOW, COLOR_YELLOW); // square
-  init_pair(5, COLOR_CYAN, COLOR_CYAN); // L piece
-  init_pair(6, COLOR_MAGENTA, COLOR_MAGENTA); // T piece
-  init_pair(7, COLOR_WHITE, COLOR_WHITE);
 
   return;
 }

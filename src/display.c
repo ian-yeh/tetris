@@ -1,4 +1,5 @@
 #include <ncurses.h>
+#include <locale.h>
 #include "tetris.h"
 #include "main.h"
 
@@ -60,3 +61,27 @@ void displayDebugger(GameState *state, WINDOW *w) {
   wnoutrefresh(w);
 }
 
+void initDisplay() {
+  // initializing ncurses
+  setlocale(LC_ALL, "");
+  initscr();
+  cbreak();
+  noecho();
+  keypad(stdscr, TRUE);
+  nodelay(stdscr, TRUE);
+  curs_set(0);
+
+  start_color();
+  use_default_colors();
+
+  // initializing colour pairs
+  init_pair(1, COLOR_RED, COLOR_RED); // S piece
+  init_pair(2, COLOR_GREEN, COLOR_GREEN); // J piece
+  init_pair(3, COLOR_BLUE, COLOR_BLUE); // I piece
+  init_pair(4, COLOR_YELLOW, COLOR_YELLOW); // square
+  init_pair(5, COLOR_CYAN, COLOR_CYAN); // L piece
+  init_pair(6, COLOR_MAGENTA, COLOR_MAGENTA); // T piece
+  init_pair(7, COLOR_WHITE, COLOR_WHITE);
+
+  return;
+}
