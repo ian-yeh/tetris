@@ -5,8 +5,8 @@
 #include <stdbool.h>
 #include "tetris.h"
 
-void render_game(GameState *state, WINDOW *w);
-void display_score(GameState *state, WINDOW *w);
-void display_debugger(GameState *state, WINDOW *w);
+void displayBoard(GameState *state, WINDOW *w);
+void displayScore(GameState *state, WINDOW *w);
+void displayDebugger(GameState *state, WINDOW *w);
 
 #endif

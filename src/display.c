@@ -2,7 +2,7 @@
 #include "tetris.h"
 #include "main.h"
 
-void render_game(GameState *state, WINDOW *w) {
+void displayBoard(GameState *state, WINDOW *w) {
   werase(w);
   int i, j, k;
 
@@ -10,11 +10,11 @@ void render_game(GameState *state, WINDOW *w) {
   box(w, 0, 0);
 
   // drawing the board
-  for (i = 0; i < ROWS; i++) {
+  for (i = 0; i < BOARD_ROWS; i++) {
     // moves the cursor to the given row
     wmove(w, 1 + i, 1);
 
-    for (j = 0; j < COLS; j++) {
+    for (j = 0; j < BOARD_COLS; j++) {
       if (state->board[i][j]) {
         wattron(w, COLOR_PAIR(state->board[i][j]));
 
@@ -30,33 +30,32 @@ void render_game(GameState *state, WINDOW *w) {
   }
 
   wnoutrefresh(w);
-
 }
 
-void display_score(GameState *state, WINDOW *w) {
+void displayScore(GameState *state, WINDOW *w) {
   werase(w);
   box(w, 0, 0);
 
   mvwprintw(w, 1, 2, "Score: %d", state->points);
   mvwprintw(w, 2, 2, "Level: %d", state->level);
-  mvwprintw(w, 3, 2, "Lines: %d", state->lines_remaining);
+  mvwprintw(w, 3, 2, "Lines: %d", state->linesRemaining);
 
   wnoutrefresh(w);
 }
 
 
-void display_debugger(GameState *state, WINDOW *w) {
+void displayDebugger(GameState *state, WINDOW *w) {
   werase(w);
 
   box(w, 0, 0);
   mvwprintw(w, 1, 2, "Debugger");
 
   mvwprintw(w, 2, 2, "Piece Row: %d", state->falling.loc.row);
-  mvwprintw(w, 4, 2, "Ticks Until Falling: %d", state->ticks_until_gravity);
-  //mvwprintw(w, 5, 2, "Tetris Fits: %d", tetris_fits(state, &state->falling));
+  mvwprintw(w, 4, 2, "Ticks Until Falling: %d", state->ticksUntilGravity);
+  //mvwprintw(w, 5, 2, "Tetris Fits: %d", tetrisFits(state, &state->falling));
 
-  //mvwprintw(w, 7, 2, "Falling Block Row: %d", tetris_fits(state, &state->falling));
-  //mvwprintw(w, 8, 2, "Falling Block Col: %d", tetris_fits(state, &state->falling));
+  //mvwprintw(w, 7, 2, "Falling Block Row: %d", tetrisFits(state, &state->falling));
+  //mvwprintw(w, 8, 2, "Falling Block Col: %d", tetrisFits(state, &state->falling));
 
   wnoutrefresh(w);
 }

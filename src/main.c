@@ -8,54 +8,54 @@
 #include "tetris.h"
 #include "main.h"
 
-double get_current_time();
-void handle_input(GameState *state);
-void init_display();
+double getCurrentTime();
+void handleInput(GameState *state);
+void initDisplay();
 
 int main() {
   printf("Welcome to Tetris!\n");
 
   // start ncurses display
-  init_display();
+  initDisplay();
 
   // initializing game windows
   WINDOW *board, *score, *debug;
-  board = newwin(ROWS+2, (COLS*COL_SPACE)+2, 4, 20);
-  score = newwin(15, 25, 4, COLS*COL_SPACE + 40);
-  debug = newwin(30, 50, 4, COLS*COL_SPACE + 70);
+  board = newwin(BOARD_ROWS+2, (BOARD_COLS*COL_SPACE)+2, 4, 20);
+  score = newwin(15, 25, 4, BOARD_COLS*COL_SPACE + 40);
+  debug = newwin(30, 50, 4, BOARD_COLS*COL_SPACE + 70);
 
   GameState game;
 
-  tetris_init(&game);
+  tetrisInitGame(&game);
 
-  double time_accumulator = 0.0; // keep track of total time
-  double tick_interval = 0.5;
-  double last_time = get_current_time();
+  double timeAccumulator = 0.0; // keep track of total time
+  double tickInterval = 0.5;
+  double lastTime = getCurrentTime();
 
-  while (!game.game_over) {
+  while (!game.gameOver) {
 
-    double current_time = get_current_time();
+    double currentTime = getCurrentTime();
 
-    double dt = current_time - last_time;
-    last_time = current_time;
+    double dt = currentTime - lastTime;
+    lastTime = currentTime;
 
     // add elapsed time to accumulator
-    time_accumulator += dt;
+    timeAccumulator += dt;
 
     // handle inputs
-    handle_input(&game);
+    handleInput(&game);
 
-    while (time_accumulator >= tick_interval) {
+    while (timeAccumulator >= tickInterval) {
       // move pieces down
-      tetris_tick(&game);
+      tetrisTick(&game);
       
-      time_accumulator -= tick_interval;
+      timeAccumulator -= tickInterval;
     }
 
     // rendering game
-    render_game(&game, board);
-    display_score(&game, score);
-    display_debugger(&game, debug);
+    displayBoard(&game, board);
+    displayScore(&game, score);
+    displayDebugger(&game, debug);
 
     doupdate();
 
@@ -70,46 +70,46 @@ int main() {
 }
 
 
-double get_current_time() {
+double getCurrentTime() {
   struct timespec ts;
   clock_gettime(CLOCK_MONOTONIC, &ts);
 
   return ts.tv_sec + ts.tv_nsec / 1000000000.0;
 }
 
-void handle_input(GameState *state) {
+void handleInput(GameState *state) {
 
   // getting input from ncurses's getch
   switch (getch()) {
     case KEY_LEFT:
-      tetris_move(state, -1);
+      tetrisMove(state, -1);
       break;
 
     case KEY_RIGHT:
-      tetris_move(state, 1);
+      tetrisMove(state, 1);
       break;
       
     case KEY_UP:
-      tetris_rotate(state);
+      tetrisRotate(state);
       break;
 
     case KEY_DOWN:
-      tetris_soft_drop(state);
+      tetrisSoftDrop(state);
       break;
 
     case ' ':
-      tetris_hard_drop(state);
+      tetrisHardDrop(state);
       break;
 
     case 'q':
-      state->game_over = true;
+      state->gameOver = true;
       break;
   }
 
   return;
 }
 
-void init_display() {
+void initDisplay() {
   // initializing ncurses
   setlocale(LC_ALL, "");
   initscr();
