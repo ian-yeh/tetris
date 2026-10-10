@@ -106,7 +106,6 @@ void tetrisPut(GameState *state, Piece *block) {
 
       }
     }
-
 }
 
 // removing a block from the board
@@ -200,6 +199,10 @@ void tetrisCheckLines(GameState *state) {
           state->board[k][l] = state->board[k-1][l];
         }
       }
+      state->score++;
+      state->linesRemaining--;
+      if (state->score % 5 == 0) state->level++; 
+
       i++;
     }
   }

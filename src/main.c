@@ -1,3 +1,4 @@
+#include <ncurses.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -6,10 +7,6 @@
 #include "display.h"
 #include "tetris.h"
 #include "main.h"
-
-double getCurrentTime();
-void handleInput(GameState *state);
-void initDisplay();
 
 int main() {
   printf("Welcome to Tetris!\n");
@@ -82,18 +79,22 @@ void handleInput(GameState *state) {
   // getting input from ncurses's getch
   switch (getch()) {
     case KEY_LEFT:
+    case 'h':
       tetrisMove(state, -1);
       break;
 
     case KEY_RIGHT:
+    case 'l':
       tetrisMove(state, 1);
       break;
       
     case KEY_UP:
+    case 'k':
       tetrisRotate(state);
       break;
 
     case KEY_DOWN:
+    case 'j':
       tetrisSoftDrop(state);
       break;
 

@@ -13,7 +13,7 @@ void displayBoard(GameState *state, WINDOW *w) {
   // drawing the board
   for (i = 0; i < BOARD_ROWS; i++) {
     // moves the cursor to the given row
-    wmove(w, 1 + i, 1);
+    wmove(w, i + 1, 1);
 
     for (j = 0; j < BOARD_COLS; j++) {
       if (state->board[i][j]) {
@@ -37,7 +37,7 @@ void displayScore(GameState *state, WINDOW *w) {
   werase(w);
   box(w, 0, 0);
 
-  mvwprintw(w, 1, 2, "Score: %d", state->points);
+  mvwprintw(w, 1, 2, "Score: %d", state->score);
   mvwprintw(w, 2, 2, "Level: %d", state->level);
   mvwprintw(w, 3, 2, "Lines: %d", state->linesRemaining);
 
@@ -53,10 +53,10 @@ void displayDebugger(GameState *state, WINDOW *w) {
 
   mvwprintw(w, 2, 2, "Piece Row: %d", state->falling.loc.row);
   mvwprintw(w, 4, 2, "Ticks Until Falling: %d", state->ticksUntilGravity);
-  //mvwprintw(w, 5, 2, "Tetris Fits: %d", tetrisFits(state, &state->falling));
+  mvwprintw(w, 5, 2, "Tetris Fits: %d", tetrisFits(state, &state->falling));
 
-  //mvwprintw(w, 7, 2, "Falling Block Row: %d", tetrisFits(state, &state->falling));
-  //mvwprintw(w, 8, 2, "Falling Block Col: %d", tetrisFits(state, &state->falling));
+  mvwprintw(w, 7, 2, "Falling Block Row: %d", tetrisFits(state, &state->falling));
+  mvwprintw(w, 8, 2, "Falling Block Col: %d", tetrisFits(state, &state->falling));
 
   wnoutrefresh(w);
 }
